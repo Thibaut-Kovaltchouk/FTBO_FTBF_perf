@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage{UPSTI_Document}
+%\usepackage{hyperref}
+%\hypersetup{
+%    colorlinks=true,
+%    linkcolor=black,
+%%    filecolor=blue,      
+%    urlcolor=blue,
+%}
+%\urlstyle{same}
+\RequirePackage[justification=centering]{caption}
+\RequirePackage{pgfplots}
+
+\newcommand{\UPSTIvariante}{5}
+
+\newcommand{\UPSTIidTypeDocument}{8}
+\newcommand{\UPSTIidVersionDocument}{1}
+\newcommand{\UPSTIidClasse}{16}
+\newcommand{\UPSTIidMatiere}{1}
+\newcommand{\UPSTInumeroSequence}{1}
+\newcommand{\UPSTItitreEnTete}{Performances des systèmes asservis}      
+\newcommand{\UPSTIduree}{} 
+\newcommand{\UPSTInumero}{}
+\newcommand{\UPSTIprogramme}{Cycle 1 - Comment modéliser le comportement des systèmes dans le but de minimiser les écarts entre le besoin de l'utilisateur et le réel ?}
+\newcommand{\UPSTInumeroVersion}{2.1}
+\UPSTIcompileVars		% "Compile" les variables
+\renewcommand{\thesubsubsection}{\alph{subsubsection})}
+
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+\RequirePackage{ifluatex}
+\ifluatex
+  \usepackage{fontspec,unicode-math}
+  \setmainfont{sourceserifpro}
+  \setmathfont{XITS Math}
+  \usepackage{shellesc}
+  \usepackage{pdftexcmds}
+
+  \makeatletter
+    \let\pdfstrcmp\pdf@strcmp
+    \let\pdffilemoddate\pdf@filemoddate
+  \makeatother
+\fi
+
+\newcommand{\executeiffilenewer}[3]{%
+	\ifnum \pdfstrcmp{\pdffilemoddate{#1}}%
+	{\pdffilemoddate{#2}}>0%
+	{\immediate\write18{#3}}\fi%
+}
+
+\newcommand{\includesvg}[2][\columnwidth]{%
+	\executeiffilenewer{#2.svg}{#2.pdf}%
+	{inkscape --export-area-page --export-dpi=300 --export-type=pdf --export-latex #2.svg}%
+	\def\svgwidth{\columnwidth}
+	\scalebox{#1}{\input{#2.pdf_tex}}
+}
+
+\DeclareMathOperator{\sign}{signe}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% DEBUT DU DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{document}
+	
+	% Création de l'en-tête
+	\UPSTIbuildPage
+	
+	\section*{Comportement des systèmes d'ordre 2 en fonction des valeurs du coefficient d'amortissement $\xi$}
+	
+	\begin{center}
+		\UPSTIeleveOnly{
+			\includesvg[1]{images/coeff_amort-Eleve}
+		}
+		\UPSTIprofOnly{
+			\includesvg[1]{images/coeff_amort-Prof}
+		}
+	\end{center}
+	
+	\section*{Lecture des performances en boucle ouverte et en boucle fermée}
+	
+	\begin{center}
+	\UPSTIeleveOnly{
+		\includesvg[0.95]{images/tableau-Eleve}
+	}
+	\UPSTIprofOnly{
+		\includesvg[0.95]{images/tableau-Prof}
+	}
+	\end{center}
+	
+	
+\end{document}
+
